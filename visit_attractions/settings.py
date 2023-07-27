@@ -25,19 +25,25 @@ SECRET_KEY = 'django-insecure-zis-9#ov9uzi-=7m8%_-zwfwi+xa%d0cr&aqj0%cthk^vxqk9b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['*'] 
+ALLOWED_HOSTS = [] 
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app'
+    'visit_attractions',
+    # 'app',
+    # 'attractions',
+    # 'comments',
+    # 'places'
 ]
 
 MIDDLEWARE = [
@@ -80,8 +86,10 @@ DATABASES = {
         # this is the name of the database that we need to create in psql --> create database visit_attractions_db
         'NAME': "visit_attractions_db",
         # should go to .env file
-        # 'USER': 'xxx',
-        # 'PASSWORD': "abcdefg"}
+        'USER': 'nadia',
+        'PASSWORD': "abcdefg",
+        'HOST': 'localhost',
+        'PORT': '5432'
     }
 }
 
@@ -126,3 +134,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

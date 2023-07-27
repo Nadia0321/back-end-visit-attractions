@@ -15,9 +15,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+from visit_attractions import views
 
 urlpatterns = [
-    path('', include('app.urls')),
-    path('admin/', admin.site.urls)
+    # this is like the blueprint in Flask, the routes start with places/,
+    # unlike Flask, we need to add / after the endpoint
+    path('places/', views.place_list),
+    path('admin/', admin.site.urls),
 ]
