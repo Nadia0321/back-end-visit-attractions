@@ -41,9 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'visit_attractions',
     # 'app',
-    # 'attractions',
-    # 'comments',
-    # 'places'
 ]
 
 MIDDLEWARE = [
