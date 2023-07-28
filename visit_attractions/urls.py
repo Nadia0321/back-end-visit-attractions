@@ -22,6 +22,6 @@ urlpatterns = [
     # this is like the blueprint in Flask, the routes start with places/,
     # unlike Flask, we need to add / after the endpoint
     path('places/', views.place_list),
-    # path('places/attractions', views.attractions_list),
+    path('places/attractions', views.attractions_list),
     path('admin/', admin.site.urls),
 ]

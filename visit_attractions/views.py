@@ -24,5 +24,19 @@ def place_list(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+@api_view(['GET', 'POST'])
+def attractions_list(request):
+    # get all attractions
+    if request.method == 'GET':
+        attractions = Attraction.objects.all()
+        serializer = PlaceSerializer(attractions, many=True)
+        return JsonResponse({'attractions': serializer.data})
 
+    # post an attraction
+    if request.method == 'POST':
+        serializer = PlaceSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
