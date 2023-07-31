@@ -71,6 +71,49 @@ def delete_one_place(request, place_id):
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# one_to_many
+
+
+@api_view(['GET'])
+def get_place_attractions(request, place_id):
+    try:
+        # this is just to make sure the place is available
+        place = Place.objects.get(pk=place_id)
+        attractions = Attraction.objects.filter(place_id=place_id)
+        serializer = AttractionSerializer(attractions, many=True)
+        return Response({'attractions': serializer.data})
+    except Place.DoesNotExist:
+        return Response(status=404, data={'message': 'Place not found'})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_attraction(request, place_id):
+    try:
+        place = Place.objects.get(id=place_id)
+    except Place.DoesNotExist:
+        return Response(status=404, data={'message': 'Place not found'})
+
+    if request.method == 'POST':
+        serializer = AttractionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(place_id=place_id)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_attraction(request, place_id, attraction_id):
+    try:
+        place = Place.objects.get(id=place_id)
+        attraction = Attraction.objects.get(
+            id=attraction_id, place_id=place_id)
+        attraction.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    except (Place.DoesNotExist, Attraction.DoesNotExist):
+        return Response(status=404, data={'message': 'Place or Attraction not found'})
+
 
 # @api_view(['GET', 'POST'])
 # def attractions_list(request, place_id):

@@ -28,6 +28,14 @@ urlpatterns = [
     path('places/', views.post_place),
     path('places/<int:place_id>/', views.get_one_place),
     path('places/<int:place_id>/', views.delete_one_place),
+    path('places/<int:place_id>/attractions/', views.get_place_attractions),
+    path('places/<int:place_id>/attractions/', views.create_attraction),
+    path('places/<int:place_id>/attractions/<int:attraction_id>',
+         views.delete_attraction),
+
+
+
+
     # path('places/<str:place_id>/', views.get_one_place),
     # path('places/<int:id>/attractions', views.attractions_list),
     # path('places/<int:place_id>/attractions/<int:attr_id>', views.one_attraction),
