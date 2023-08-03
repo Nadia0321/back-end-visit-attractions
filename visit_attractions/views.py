@@ -120,9 +120,9 @@ def delete_attraction(request, place_id, attraction_id):
 
 # get one user by id
 @api_view(['GET'])
-def get_user(request, user_id):
+def get_user(request, username):
     try:
-        user = User.objects.get(pk=user_id)
+        user = User.objects.get(username=username)
     except User.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -130,6 +130,16 @@ def get_user(request, user_id):
 
     if request.method == 'GET':
         return JsonResponse({'user': serializer.data})
+
+
+@api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+def post_user(request):
+    serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # class HomeView(APIView):

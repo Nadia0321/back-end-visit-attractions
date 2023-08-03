@@ -8,7 +8,7 @@ from .user import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'name', 'gmail', 'password']
+        fields = ['id', 'name', 'username', 'email']
 
 
 class PlaceSerializer(serializers.ModelSerializer):

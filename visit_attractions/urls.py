@@ -32,7 +32,8 @@ urlpatterns = [
     path('places/<int:place_id>/attractions/', views.create_attraction),
     path('places/<int:place_id>/attractions/<int:attraction_id>',
          views.delete_attraction),
-    path('users/<int:user_id>/', views.get_user),
+    path('users/<str:username>/', views.get_user),
+    path('users/', views.post_user),
 
     path('admin/', admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
