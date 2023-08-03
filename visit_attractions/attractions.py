@@ -11,8 +11,8 @@ class Attraction(models.Model):
     favorite = models.BooleanField(default=False)
     place_id = models.ForeignKey(
         Place, on_delete=models.CASCADE, related_name='attraction')
-    user_id = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='attraction', default=None, null=True)
+    # user_id = models.ForeignKey(
+    #     User, on_delete=models.CASCADE, related_name='attraction', default=None, null=True)
     # image = models.ImageField(upload_to='images/')
 
     def __str__(self):

@@ -2,11 +2,14 @@
 from django.http import JsonResponse
 from .places import Place
 from .attractions import Attraction
+from .user import User
 from .serializers import PlaceSerializer
 from .serializers import AttractionSerializer
 from .serializers import CommentSerializer
+from .serializers import UserSerializer
+
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -29,7 +32,7 @@ def get_place_list(request):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def post_place(request):
     # post a place
     # if request.method == 'POST':
@@ -58,7 +61,7 @@ def get_one_place(request, place_id):
 
 # Delete a place
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def delete_one_place(request, place_id):
     try:
         places = Place.objects.get(pk=place_id)
@@ -87,7 +90,7 @@ def get_place_attractions(request, place_id):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def create_attraction(request, place_id):
     try:
         place = Place.objects.get(id=place_id)
@@ -103,7 +106,7 @@ def create_attraction(request, place_id):
 
 
 @api_view(['DELETE'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def delete_attraction(request, place_id, attraction_id):
     try:
         place = Place.objects.get(id=place_id)
@@ -115,50 +118,19 @@ def delete_attraction(request, place_id, attraction_id):
         return Response(status=404, data={'message': 'Place or Attraction not found'})
 
 
-# @api_view(['GET', 'POST'])
-# def attractions_list(request, place_id):
-#     # get all attractions
-#     if request.method == 'GET':
-#         attractions = Attraction.objects.all()
-#         serializer = AttractionSerializer(attractions, many=True)
-#         return JsonResponse({'attractions': serializer.data})
+# get one user by id
+@api_view(['GET'])
+def get_user(request, user_id):
+    try:
+        user = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
-#     # post an attraction
-#     if request.method == 'POST':
-#         serializer = AttractionSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer = UserSerializer(user)
 
-# @api_view(['GET'])
-# def one_attraction(request):
-#     # get all attractions
-#     if request.method == 'GET':
-#         attractions = Attraction.objects.all()
-#         serializer = AttractionSerializer(attractions, many=True)
-#         return JsonResponse({'attractions': serializer.data})
+    if request.method == 'GET':
+        return JsonResponse({'user': serializer.data})
 
-#     # post an attraction
-#     if request.method == 'POST':
-#         serializer = AttractionSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    # response = get_object_or_404(cls, id)
-    # return JsonResponse(response.data)
-
-
-# def validate_model(cls, id):
-#     try:
-#         # id = int(id)
-#         model = cls.objects.get(pk=id)
-#     except cls.DoesNotExist:
-#         return Response(status=status.HTTP_404_NOT_FOUND)
-
-#     return model
 
 # class HomeView(APIView):
 

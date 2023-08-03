@@ -32,23 +32,9 @@ urlpatterns = [
     path('places/<int:place_id>/attractions/', views.create_attraction),
     path('places/<int:place_id>/attractions/<int:attraction_id>',
          views.delete_attraction),
+    path('users/<int:user_id>/', views.get_user),
 
-
-
-
-    # path('places/<str:place_id>/', views.get_one_place),
-    # path('places/<int:id>/attractions', views.attractions_list),
-    # path('places/<int:place_id>/attractions/<int:attr_id>', views.one_attraction),
     path('admin/', admin.site.urls),
-
-    # path('token/', jwt_views.TokenObtainPairView.as_view(), name ='token_obtain_pair'),
-    # path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name ='token_refresh'),
-
-    # path('home/', views.HomeView.as_view(), name ='home'),
-    # path('logout/', views.LogoutView.as_view(), name ='logout'),
-    # path('', include('visit_attractions.urls')),
-
-
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh')
 ]

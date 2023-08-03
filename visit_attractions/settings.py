@@ -25,8 +25,8 @@ SECRET_KEY = 'django-insecure-zis-9#ov9uzi-=7m8%_-zwfwi+xa%d0cr&aqj0%cthk^vxqk9b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['*'] 
-ALLOWED_HOSTS = [] 
+# ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -60,14 +60,16 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    
+
 ]
 CORS_ALLOWED_ORIGINS = ['http://localhost:3000']
 
 REST_FRAMEWORK = {
-     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-      ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        # 'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.permissions.AllowAny',
+    ],
 }
 
 ROOT_URLCONF = 'visit_attractions.urls'
@@ -148,7 +150,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 
 # SIMPLE_JWT = {
