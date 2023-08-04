@@ -19,23 +19,32 @@ from django.urls import path, include
 # from rest_framework_simplejwt import views as jwt_views
 from visit_attractions import views
 
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+# from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     # this is like the blueprint in Flask, the routes start with places/,
     # unlike Flask, we need to add / after the endpoint
     path('places/', views.get_place_list),
-    path('places/', views.post_place),
+    path('place/', views.post_place),
+
     path('places/<int:place_id>/', views.get_one_place),
-    path('places/<int:place_id>/', views.delete_one_place),
+    path('place/<int:place_id>/', views.delete_one_place),
+
+
     path('places/<int:place_id>/attractions/', views.get_place_attractions),
-    path('places/<int:place_id>/attractions/', views.create_attraction),
-    path('places/<int:place_id>/attractions/<int:attraction_id>',
-         views.delete_attraction),
+    path('place/<int:place_id>/attractions/', views.create_attraction),
+    path('place/<int:place_id>/attractions/<int:attraction_id>/',views.delete_attraction),
+    path('places/<int:place_id>/attractions/<int:attraction_id>/like/', views.like_attraction),
+    path('places/<int:place_id>/attractions/<int:attraction_id>/dislike/', views.dislike_attraction),
+    path('places/<int:place_id>/attractions/<int:attraction_id>/favorite/', views.favorite_attraction),
+    path('places/<int:place_id>/attractions/<int:attraction_id>/comment/', views.comment_attraction),
+
+
+
     path('users/<str:username>/', views.get_user),
     path('users/', views.post_user),
 
     path('admin/', admin.site.urls),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh')
+    # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh')
 ]

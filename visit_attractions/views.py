@@ -3,13 +3,14 @@ from django.http import JsonResponse
 from .places import Place
 from .attractions import Attraction
 from .user import User
+from .comments import Comment
 from .serializers import PlaceSerializer
 from .serializers import AttractionSerializer
 from .serializers import CommentSerializer
 from .serializers import UserSerializer
 
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny, IsAuthenticated
+# from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -19,7 +20,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from rest_framework_simplejwt.tokens import RefreshToken
+# from rest_framework_simplejwt.tokens import RefreshToken
 
 
 @api_view(['GET'])
@@ -43,7 +44,7 @@ def post_place(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# get one place
+# get one place by id
 @api_view(['GET'])
 def get_one_place(request, place_id):
     try:
@@ -55,12 +56,11 @@ def get_one_place(request, place_id):
     # if not serializer.is_valid():
     #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    if request.method == 'GET':
-        return JsonResponse({'places': serializer.data})
+    return JsonResponse({'places': serializer.data})
 
 
-# Delete a place
-@api_view(['GET'])
+# Delete a place by id
+@api_view(['DELETE'])
 # @permission_classes([IsAuthenticated])
 def delete_one_place(request, place_id):
     try:
@@ -68,15 +68,17 @@ def delete_one_place(request, place_id):
     except Place.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    serializer = PlaceSerializer(places)
-    if serializer.is_valid():
-        serializer.delete()
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    places.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+    # serializer = PlaceSerializer(places)
+    # if serializer.is_valid():
+    #     serializer.delete()
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
+    # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+#====================================================
 # one_to_many
-
-
 @api_view(['GET'])
 def get_place_attractions(request, place_id):
     try:
@@ -97,14 +99,17 @@ def create_attraction(request, place_id):
     except Place.DoesNotExist:
         return Response(status=404, data={'message': 'Place not found'})
 
-    if request.method == 'POST':
-        serializer = AttractionSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(place_id=place_id)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # if request.method == 'POST':
+    data = request.data.copy()
+    data['place'] = place.id  # Set the place ID in the data
+    serializer = AttractionSerializer(data=data)
+    if serializer.is_valid():
+        attraction = serializer.save()  # Place will be set automatically
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# delte a specific attraction in a specific place 
 @api_view(['DELETE'])
 # @permission_classes([IsAuthenticated])
 def delete_attraction(request, place_id, attraction_id):
@@ -118,7 +123,74 @@ def delete_attraction(request, place_id, attraction_id):
         return Response(status=404, data={'message': 'Place or Attraction not found'})
 
 
+@api_view(['PATCH'])
+def like_attraction(request, place_id, attraction_id):
+    try:
+        attraction = Attraction.objects.get(
+            id=attraction_id, place_id=place_id)
+    except Attraction.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    # Increment the 'likes' field by 1
+    attraction.likes += 1
+    attraction.save()
+
+    serializer = AttractionSerializer(attraction)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['PATCH'])
+def dislike_attraction(request, place_id, attraction_id):
+    try:
+        attraction = Attraction.objects.get(
+            id=attraction_id, place_id=place_id)
+    except Attraction.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    # Increment the 'likes' field by 1
+    attraction.dislike += 1
+    attraction.save()
+
+    serializer = AttractionSerializer(attraction)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['PATCH'])
+def favorite_attraction(request, place_id, attraction_id):
+    try:
+        attraction = Attraction.objects.get(
+            id=attraction_id, place_id=place_id)
+    except Attraction.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    # Increment the 'likes' field by 1
+    if attraction.favorite:
+        attraction.favorite = False
+    else:
+        attraction.favorite = True
+    
+    attraction.save()
+
+    serializer = AttractionSerializer(attraction)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+# ======================
+@api_view(['GET'])
+def comment_attraction(request, place_id, attraction_id):
+    try:
+        place = Place.objects.get(id=place_id)
+        attraction = Attraction.objects.get(id=attraction_id, place_id=place_id)
+        comments = Comment.objects.filter(attraction_id=attraction_id) 
+        serializer = CommentSerializer(comments, many=True)
+        return Response({'comments': serializer.data})
+    except (Place.DoesNotExist, Attraction.DoesNotExist):
+        return Response(status=status.HTTP_404_NOT_FOUND, data={'message': 'Place or Attraction not found'})
+    
+
+
+
+    
 # get one user by id
+# ============================================================
 @api_view(['GET'])
 def get_user(request, username):
     try:
