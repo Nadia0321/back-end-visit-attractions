@@ -37,7 +37,8 @@ urlpatterns = [
     path('places/<int:place_id>/attractions/<int:attraction_id>/like/', views.like_attraction),
     path('places/<int:place_id>/attractions/<int:attraction_id>/dislike/', views.dislike_attraction),
     path('places/<int:place_id>/attractions/<int:attraction_id>/favorite/', views.favorite_attraction),
-    path('places/<int:place_id>/attractions/<int:attraction_id>/comment/', views.comment_attraction),
+    path('places/<int:place_id>/attractions/<int:attraction_id>/comment/', views.get_comment_attraction),
+    path('place/<int:place_id>/attraction/<int:attraction_id>/comment/', views.post_comment_attraction),
 
 
 

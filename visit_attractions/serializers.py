@@ -28,5 +28,5 @@ class AttractionSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ['id', 'description', 'attraction_id']
+        fields = ['id', 'description', 'attraction_id', 'username']
         # ,'user_id'

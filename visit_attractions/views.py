@@ -175,7 +175,7 @@ def favorite_attraction(request, place_id, attraction_id):
 
 # ======================
 @api_view(['GET'])
-def comment_attraction(request, place_id, attraction_id):
+def get_comment_attraction(request, place_id, attraction_id):
     try:
         place = Place.objects.get(id=place_id)
         attraction = Attraction.objects.get(id=attraction_id, place_id=place_id)
@@ -186,9 +186,21 @@ def comment_attraction(request, place_id, attraction_id):
         return Response(status=status.HTTP_404_NOT_FOUND, data={'message': 'Place or Attraction not found'})
     
 
+@api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+def post_comment_attraction(request, place_id, attraction_id):
+    try:
+        place = Place.objects.get(id=place_id)
+        attraction = Attraction.objects.get(id=attraction_id, place_id=place_id)
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(attraction_id=attraction)  # Associate comment with the attraction
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    except (Place.DoesNotExist, Attraction.DoesNotExist):
+        return Response(status=status.HTTP_404_NOT_FOUND, data={'message': 'Place or Attraction not found'})
 
-    
 # get one user by id
 # ============================================================
 @api_view(['GET'])
@@ -212,6 +224,11 @@ def post_user(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
 
 
 # class HomeView(APIView):
