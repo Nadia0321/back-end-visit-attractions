@@ -20,8 +20,31 @@ from rest_framework.exceptions import NotFound
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-# from rest_framework_simplejwt.tokens import RefreshToken
+# from rest_framework.views import APIView
+# from rest_framework.response import Response
+# from rest_framework.parsers import MultiPartParser, FormParser
+# from .models import Place
+# from .models import BlogPost
+from django.shortcuts import render
 
+# from rest_framework_simplejwt.tokens import RefreshToken
+# @api_view(['GET'])
+# def get_place_list(request):
+
+#     places = Place.objects.all()
+#     serialized_places = []
+
+#     for place in places:
+#         serialized_place = {
+#             'name': place.name,
+#             'description': place.description,
+#             'country': place.country,
+#             'city': place.city,
+#             'image_url': place.image.url,  # Generate the S3 URL
+#         }
+#         serialized_places.append(serialized_place)
+
+#     return JsonResponse({'places': serialized_places})
 
 @api_view(['GET'])
 def get_place_list(request):
@@ -43,7 +66,30 @@ def post_place(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# class PlaceCreateView(APIView):
+#     parser_classes = (MultiPartParser, FormParser)
 
+#     def post(self, request, *args, **kwargs):
+#         name = request.data.get("name")
+#         description = request.data.get("description")
+#         country = request.data.get("country")
+#         city = request.data.get("city")
+#         image = request.data.get("image")
+
+#         if name and description and country and city and image:
+#             # Upload the image to S3 or another storage service and get the URL
+#             image_url = upload_image_to_s3(image)
+
+#             # Create a new Place instance with the image URL
+#             place = Place.objects.create(
+#                 name=name, description=description, country=country,
+#                 city=city, image=image_url
+#             )
+
+#             return Response({"message": "Place created successfully."}, status=201)
+#         else:
+#             return Response({"message": "Invalid data provided."}, status=400)
+        
 # get one place by id
 @api_view(['GET'])
 def get_one_place(request, place_id):
@@ -226,7 +272,8 @@ def post_user(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
+# def home(request):
+#     return render(request, 'home.html', {'posts':BlogPost.object.all()})
 
 
 

@@ -14,14 +14,14 @@ class UserSerializer(serializers.ModelSerializer):
 class PlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Place
-        fields = ['id', 'name', 'description', 'country', 'city']
+        fields = ['id', 'name', 'description', 'country', 'city', 'image']
 
 
 class AttractionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attraction
         fields = ['id', 'name', 'likes', 'dislike',
-                  'description', 'favorite', 'place_id']
+                  'description', 'favorite', 'place_id', 'image']
 # 'user_id'
 
 
