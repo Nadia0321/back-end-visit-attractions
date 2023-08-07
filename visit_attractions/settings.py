@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -104,7 +104,7 @@ DATABASES = {
         'NAME': "visit_attractions_db",
         # should go to .env file
         'USER': 'nadia',
-        'PASSWORD': "abcdefg",
+        'PASSWORD': os.environ.get('PASSWORD'),
         'HOST': 'localhost',
         'PORT': '5432'
     }
@@ -160,8 +160,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #      'BLACKLIST_AFTER_ROTATION': True
 # }
 
-AWS_ACCESS_KEY_ID = 'AKIA4IYEAEDNHZ2Z73Y6'
-AWS_SECRET_ACCESS_KEY = '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' 
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = 'visit-attraction'
 AWS_S3_SIGNATURE_NAME = 's3v4',
 AWS_S3_REGION_NAME = 'us-east-1'
