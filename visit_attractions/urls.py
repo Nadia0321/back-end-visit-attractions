@@ -19,7 +19,7 @@ from django.urls import path, include
 # from rest_framework_simplejwt import views as jwt_views
 from visit_attractions import views
 from django.conf.urls.static import static
-
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 # from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
@@ -34,12 +34,18 @@ urlpatterns = [
 
     path('places/<int:place_id>/attractions/', views.get_place_attractions),
     path('place/<int:place_id>/attractions/', views.create_attraction),
-    path('place/<int:place_id>/attractions/<int:attraction_id>/',views.delete_attraction),
-    path('places/<int:place_id>/attractions/<int:attraction_id>/like/', views.like_attraction),
-    path('places/<int:place_id>/attractions/<int:attraction_id>/dislike/', views.dislike_attraction),
-    path('places/<int:place_id>/attractions/<int:attraction_id>/favorite/', views.favorite_attraction),
-    path('places/<int:place_id>/attractions/<int:attraction_id>/comment/', views.get_comment_attraction),
-    path('place/<int:place_id>/attraction/<int:attraction_id>/comment/', views.post_comment_attraction),
+    path('place/<int:place_id>/attractions/<int:attraction_id>/',
+         views.delete_attraction),
+    path('places/<int:place_id>/attractions/<int:attraction_id>/like/',
+         views.like_attraction),
+    path('places/<int:place_id>/attractions/<int:attraction_id>/dislike/',
+         views.dislike_attraction),
+    path('places/<int:place_id>/attractions/<int:attraction_id>/favorite/',
+         views.favorite_attraction),
+    path('places/<int:place_id>/attractions/<int:attraction_id>/comment/',
+         views.get_comment_attraction),
+    path('place/<int:place_id>/attraction/<int:attraction_id>/comment/',
+         views.post_comment_attraction),
 
 
 
@@ -50,3 +56,5 @@ urlpatterns = [
     # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh')
 ]
+
+urlpatterns += staticfiles_urlpatterns()
