@@ -7,7 +7,7 @@ from django.contrib.postgres.fields import ArrayField
 class Attraction(models.Model):
     name = models.CharField(max_length=100)
     likes = models.IntegerField(default=0)
-    description = models.CharField(max_length=100, default="")
+    description = models.CharField(max_length=10000, default="")
     dislike = models.IntegerField(default=0)
     favorite = models.BooleanField(default=False)
     place_id = models.ForeignKey(
