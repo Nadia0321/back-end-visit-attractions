@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-zis-9#ov9uzi-=7m8%_-zwfwi+xa%d0cr&aqj0%cthk^vxqk9b
 DEBUG = True
 
 # ALLOWED_HOSTS = ['*']
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
