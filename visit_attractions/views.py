@@ -289,7 +289,7 @@ def get_all_favorite_attractions(request):
         {
             "id": attr.id,
             "name": attr.name,
-            "description": attr.description,
+            "image": attr.image.url,
             "place_id": attr.place_id.id,
 
         }
