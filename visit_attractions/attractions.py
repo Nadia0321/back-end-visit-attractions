@@ -17,6 +17,7 @@ class Attraction(models.Model):
     image = models.ImageField(upload_to='images/', blank=True, null=True)
     # image = ArrayField(models.ImageField(
     #     upload_to='images/', blank=True, null=True), blank=True, null=True)
+    created_by = models.CharField(default='Nadia123')
 
     def __str__(self):
         return f"{self.place_id}, {self.name}"

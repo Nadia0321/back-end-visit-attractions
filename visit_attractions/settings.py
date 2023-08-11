@@ -111,7 +111,7 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '5432'
     }
-    # }
+
 
     # "default": dj_database_url.parse(os.environ.get("DATABASE_URL"))
 }
