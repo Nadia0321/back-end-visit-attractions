@@ -289,9 +289,9 @@ def get_all_favorite_attractions(request):
         {
             "id": attr.id,
             "name": attr.name,
-            "description": attr.description,
+            "image": attr.image,
             "place_id": attr.place_id.id,
-            # Add other fields you need
+
         }
         for attr in favorite_attractions
     ]
