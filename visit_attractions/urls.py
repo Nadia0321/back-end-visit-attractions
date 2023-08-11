@@ -46,10 +46,11 @@ urlpatterns = [
          views.get_comment_attraction),
     path('place/<int:place_id>/attraction/<int:attraction_id>/comment/',
          views.post_comment_attraction),
+    path('attractions/favorites/',
+         views.get_all_favorite_attractions),
 
 
-
-    path('users/<str:username>/', views.get_user),
+    path('users/<str:user_sub>/', views.get_user),
     path('users/', views.post_user),
 
     path('admin/', admin.site.urls),

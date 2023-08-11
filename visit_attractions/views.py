@@ -46,6 +46,7 @@ from django.shortcuts import render
 
 #     return JsonResponse({'places': serialized_places})
 
+
 @api_view(['GET'])
 def get_place_list(request):
     # get all places
@@ -89,8 +90,10 @@ def post_place(request):
 #             return Response({"message": "Place created successfully."}, status=201)
 #         else:
 #             return Response({"message": "Invalid data provided."}, status=400)
-        
+
 # get one place by id
+
+
 @api_view(['GET'])
 def get_one_place(request, place_id):
     try:
@@ -123,7 +126,7 @@ def delete_one_place(request, place_id):
     # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-#====================================================
+# ====================================================
 # one_to_many
 @api_view(['GET'])
 def get_place_attractions(request, place_id):
@@ -155,7 +158,7 @@ def create_attraction(request, place_id):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# delte a specific attraction in a specific place 
+# delte a specific attraction in a specific place
 @api_view(['DELETE'])
 # @permission_classes([IsAuthenticated])
 def delete_attraction(request, place_id, attraction_id):
@@ -200,6 +203,7 @@ def dislike_attraction(request, place_id, attraction_id):
     serializer = AttractionSerializer(attraction)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+
 @api_view(['PATCH'])
 def favorite_attraction(request, place_id, attraction_id):
     try:
@@ -213,34 +217,39 @@ def favorite_attraction(request, place_id, attraction_id):
         attraction.favorite = False
     else:
         attraction.favorite = True
-    
+
     attraction.save()
 
     serializer = AttractionSerializer(attraction)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 # ======================
+
+
 @api_view(['GET'])
 def get_comment_attraction(request, place_id, attraction_id):
     try:
         place = Place.objects.get(id=place_id)
-        attraction = Attraction.objects.get(id=attraction_id, place_id=place_id)
-        comments = Comment.objects.filter(attraction_id=attraction_id) 
+        attraction = Attraction.objects.get(
+            id=attraction_id, place_id=place_id)
+        comments = Comment.objects.filter(attraction_id=attraction_id)
         serializer = CommentSerializer(comments, many=True)
         return Response({'comments': serializer.data})
     except (Place.DoesNotExist, Attraction.DoesNotExist):
         return Response(status=status.HTTP_404_NOT_FOUND, data={'message': 'Place or Attraction not found'})
-    
+
 
 @api_view(['POST'])
 # @permission_classes([IsAuthenticated])
 def post_comment_attraction(request, place_id, attraction_id):
     try:
         place = Place.objects.get(id=place_id)
-        attraction = Attraction.objects.get(id=attraction_id, place_id=place_id)
+        attraction = Attraction.objects.get(
+            id=attraction_id, place_id=place_id)
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(attraction_id=attraction)  # Associate comment with the attraction
+            # Associate comment with the attraction
+            serializer.save(attraction_id=attraction)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -249,6 +258,8 @@ def post_comment_attraction(request, place_id, attraction_id):
 
 # get one user by id
 # ============================================================
+
+
 @api_view(['GET'])
 def get_user(request, username):
     try:
@@ -272,10 +283,23 @@ def post_user(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+def get_all_favorite_attractions(request):
+    favorite_attractions = Attraction.objects.filter(favorite=True)
+    attractions_data = [
+        {
+            "id": attr.id,
+            "name": attr.name,
+            "description": attr.description,
+            "place_id": attr.place_id.id,
+            # Add other fields you need
+        }
+        for attr in favorite_attractions
+    ]
+    return JsonResponse({"attractions": attractions_data})
+
+
 # def home(request):
 #     return render(request, 'home.html', {'posts':BlogPost.object.all()})
-
-
 
 
 # class HomeView(APIView):
