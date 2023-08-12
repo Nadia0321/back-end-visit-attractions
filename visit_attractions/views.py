@@ -291,6 +291,20 @@ def get_all_favorite_attractions(request):
     return JsonResponse({"attractions": attractions_data})
 
 
+def get_user_posted_attractions(request, user_id):
+    posted_attractions = Attraction.objects.filter(created_by=user_id)
+    attractions_data = [
+        {
+            "id": attr.id,
+            "name": attr.name,
+            "image": attr.image.url,
+            "place_id": attr.place_id.id,
+        }
+        for attr in posted_attractions
+    ]
+    return JsonResponse({"attractions": attractions_data})
+
+
 # def home(request):
 #     return render(request, 'home.html', {'posts':BlogPost.object.all()})
 

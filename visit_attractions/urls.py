@@ -48,6 +48,7 @@ urlpatterns = [
          views.post_comment_attraction),
     path('attractions/favorites/',
          views.get_all_favorite_attractions),
+    path('attractions/user/<str:user_id>/', views.get_user_posted_attractions),
 
 
     path('users/<str:user_sub>/', views.get_user),
