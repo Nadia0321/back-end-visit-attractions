@@ -20,11 +20,6 @@ from rest_framework.exceptions import NotFound
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-# from rest_framework.views import APIView
-# from rest_framework.response import Response
-# from rest_framework.parsers import MultiPartParser, FormParser
-# from .models import Place
-# from .models import BlogPost
 from django.shortcuts import render
 
 # from rest_framework_simplejwt.tokens import RefreshToken
@@ -150,7 +145,7 @@ def create_attraction(request, place_id):
 
     # if request.method == 'POST':
     data = request.data.copy()
-    data['place'] = place.id  # Set the place ID in the data
+    data['place'] = place.id
     serializer = AttractionSerializer(data=data)
     if serializer.is_valid():
         attraction = serializer.save()  # Place will be set automatically
@@ -196,7 +191,6 @@ def dislike_attraction(request, place_id, attraction_id):
     except Attraction.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    # Increment the 'likes' field by 1
     attraction.dislike += 1
     attraction.save()
 
@@ -212,7 +206,6 @@ def favorite_attraction(request, place_id, attraction_id):
     except Attraction.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    # Increment the 'likes' field by 1
     if attraction.favorite:
         attraction.favorite = False
     else:

@@ -21,7 +21,7 @@ class AttractionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attraction
         fields = ['id', 'name', 'likes', 'dislike',
-                  'description', 'favorite', 'place_id', 'image']
+                  'description', 'favorite', 'place_id', 'image', 'created_by']
 # 'user_id'
 
 
