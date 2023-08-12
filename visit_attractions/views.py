@@ -308,12 +308,15 @@ def get_user_posted_attractions(request, user_id):
 
 
 @api_view(['DELETE'])
-# @permission_classes([IsAuthenticated])
 def delete_user_posted_attraction(request, attraction_id):
     try:
         attraction = Attraction.objects.get(id=attraction_id)
-        if attraction.created_by != request.user.username:
+
+        username_param = request.GET.get("username")
+
+        if attraction.created_by != username_param:
             return Response({"message": "You are not authorized to delete this attraction."}, status=403)
+
         attraction.delete()
         return Response({"message": "Attraction deleted successfully."})
     except Attraction.DoesNotExist:
