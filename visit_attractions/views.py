@@ -276,6 +276,7 @@ def post_user(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['GET'])
 def get_all_favorite_attractions(request):
     favorite_attractions = Attraction.objects.filter(favorite=True)
     attractions_data = [
@@ -291,6 +292,7 @@ def get_all_favorite_attractions(request):
     return JsonResponse({"attractions": attractions_data})
 
 
+@api_view(['GET'])
 def get_user_posted_attractions(request, user_id):
     posted_attractions = Attraction.objects.filter(created_by=user_id)
     attractions_data = [
@@ -303,6 +305,19 @@ def get_user_posted_attractions(request, user_id):
         for attr in posted_attractions
     ]
     return JsonResponse({"attractions": attractions_data})
+
+
+@api_view(['DELETE'])
+# @permission_classes([IsAuthenticated])
+def delete_user_posted_attraction(request, attraction_id):
+    try:
+        attraction = Attraction.objects.get(id=attraction_id)
+        if attraction.created_by != request.user.sub:
+            return JsonResponse({"message": "You are not authorized to delete this attraction."}, status=403)
+        attraction.delete()
+        return JsonResponse({"message": "Attraction deleted successfully."})
+    except Attraction.DoesNotExist:
+        return JsonResponse({"message": "Attraction not found."}, status=404)
 
 
 # def home(request):
