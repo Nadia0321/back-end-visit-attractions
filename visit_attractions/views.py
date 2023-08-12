@@ -312,12 +312,12 @@ def get_user_posted_attractions(request, user_id):
 def delete_user_posted_attraction(request, attraction_id):
     try:
         attraction = Attraction.objects.get(id=attraction_id)
-        if attraction.created_by != request.user.sub:
-            return JsonResponse({"message": "You are not authorized to delete this attraction."}, status=403)
+        if attraction.created_by != request.user.username:
+            return Response({"message": "You are not authorized to delete this attraction."}, status=403)
         attraction.delete()
-        return JsonResponse({"message": "Attraction deleted successfully."})
+        return Response({"message": "Attraction deleted successfully."})
     except Attraction.DoesNotExist:
-        return JsonResponse({"message": "Attraction not found."}, status=404)
+        return Response({"message": "Attraction not found."}, status=404)
 
 
 # def home(request):
