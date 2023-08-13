@@ -8,6 +8,7 @@ from .serializers import PlaceSerializer
 from .serializers import AttractionSerializer
 from .serializers import CommentSerializer
 from .serializers import UserSerializer
+from urllib.parse import unquote
 
 from rest_framework.decorators import api_view, permission_classes
 # from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -256,14 +257,15 @@ def post_comment_attraction(request, place_id, attraction_id):
 @api_view(['GET'])
 def get_user(request, username):
     try:
-        user = User.objects.get(username=username)
+        decoded_username = unquote(username)
+        user = User.objects.get(username=decoded_username)
     except User.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     serializer = UserSerializer(user)
 
     if request.method == 'GET':
-        return JsonResponse({'user': serializer.data})
+        return Response({'user': serializer.data})
 
 
 @api_view(['POST'])

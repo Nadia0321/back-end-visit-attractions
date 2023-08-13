@@ -52,7 +52,7 @@ urlpatterns = [
     path('attractions/delete/<int:attraction_id>/',
          views.delete_user_posted_attraction),
 
-    path('users/<str:user_sub>/', views.get_user),
+    path('users/<str:username>/', views.get_user),
     path('users/', views.post_user),
 
     path('admin/', admin.site.urls),
