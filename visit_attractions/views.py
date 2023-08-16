@@ -224,8 +224,7 @@ def get_all_favorite_attractions(request):
         {
             "id": attr.id,
             "name": attr.name,
-            "imageA": attr.imageA.url,
-            "imageB": attr.imageB.url,
+            "image": attr.image.url,
             "place_id": attr.place_id.id,
 
         }
@@ -241,8 +240,7 @@ def get_user_posted_attractions(request, user_id):
         {
             "id": attr.id,
             "name": attr.name,
-            "imageA": attr.imageA.url,
-            "imageB": attr.imageB.url,
+            "image": attr.image.url,
             "place_id": attr.place_id.id,
         }
         for attr in posted_attractions

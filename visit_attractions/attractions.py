@@ -12,8 +12,7 @@ class Attraction(models.Model):
     favorite = models.BooleanField(default=False)
     place_id = models.ForeignKey(
         Place, on_delete=models.CASCADE, related_name='attraction')
-    imageA = models.ImageField(upload_to='images/', blank=True, null=True)
-    imageB = models.ImageField(upload_to='images/', blank=True, null=True)
+    image = models.ImageField(upload_to='images/', blank=True, null=True)
     created_by = models.CharField(default='Nadia123')
 
     def __str__(self):

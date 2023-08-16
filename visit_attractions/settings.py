@@ -101,19 +101,19 @@ WSGI_APPLICATION = 'visit_attractions.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     # this is the name of the database that we need to create in psql --> create database visit_attractions_db
-    #     'NAME': "visit_attractions_db",
-    #     # should go to .env file
-    #     'USER': 'nadia',
-    #     'PASSWORD': os.environ.get('PASSWORD'),
-    #     'HOST': 'localhost',
-    #     'PORT': '5432'
-    # }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        # this is the name of the database that we need to create in psql --> create database visit_attractions_db
+        'NAME': "visit_attractions_db",
+        # should go to .env file
+        'USER': 'nadia',
+        'PASSWORD': os.environ.get('PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '5432'
+    }
 
 
-    "default": dj_database_url.parse(os.environ.get("DATABASE_URL"))
+    # "default": dj_database_url.parse(os.environ.get("DATABASE_URL"))
 }
 
 # Password validation
