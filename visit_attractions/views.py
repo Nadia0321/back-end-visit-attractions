@@ -23,30 +23,10 @@ from rest_framework.response import Response
 
 from django.shortcuts import render
 
-# from rest_framework_simplejwt.tokens import RefreshToken
-# @api_view(['GET'])
-# def get_place_list(request):
-
-#     places = Place.objects.all()
-#     serialized_places = []
-
-#     for place in places:
-#         serialized_place = {
-#             'name': place.name,
-#             'description': place.description,
-#             'country': place.country,
-#             'city': place.city,
-#             'image_url': place.image.url,  # Generate the S3 URL
-#         }
-#         serialized_places.append(serialized_place)
-
-#     return JsonResponse({'places': serialized_places})
 
 
 @api_view(['GET'])
 def get_place_list(request):
-    # get all places
-    # if request.method == 'GET':
     places = Place.objects.all()
     serializer = PlaceSerializer(places, many=True)
     return JsonResponse({'places': serializer.data})
@@ -55,39 +35,11 @@ def get_place_list(request):
 @api_view(['POST'])
 # @permission_classes([IsAuthenticated])
 def post_place(request):
-    # post a place
-    # if request.method == 'POST':
     serializer = PlaceSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# class PlaceCreateView(APIView):
-#     parser_classes = (MultiPartParser, FormParser)
-
-#     def post(self, request, *args, **kwargs):
-#         name = request.data.get("name")
-#         description = request.data.get("description")
-#         country = request.data.get("country")
-#         city = request.data.get("city")
-#         image = request.data.get("image")
-
-#         if name and description and country and city and image:
-#             # Upload the image to S3 or another storage service and get the URL
-#             image_url = upload_image_to_s3(image)
-
-#             # Create a new Place instance with the image URL
-#             place = Place.objects.create(
-#                 name=name, description=description, country=country,
-#                 city=city, image=image_url
-#             )
-
-#             return Response({"message": "Place created successfully."}, status=201)
-#         else:
-#             return Response({"message": "Invalid data provided."}, status=400)
-
-# get one place by id
 
 
 @api_view(['GET'])
@@ -98,9 +50,6 @@ def get_one_place(request, place_id):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     serializer = PlaceSerializer(places)
-    # if not serializer.is_valid():
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
     return JsonResponse({'places': serializer.data})
 
 
@@ -115,11 +64,6 @@ def delete_one_place(request, place_id):
 
     places.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
-    # serializer = PlaceSerializer(places)
-    # if serializer.is_valid():
-    #     serializer.delete()
-    #     return Response(serializer.data, status=status.HTTP_200_OK)
-    # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # ====================================================
@@ -218,8 +162,6 @@ def favorite_attraction(request, place_id, attraction_id):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 # ======================
-
-
 @api_view(['GET'])
 def get_comment_attraction(request, place_id, attraction_id):
     try:
@@ -251,9 +193,6 @@ def post_comment_attraction(request, place_id, attraction_id):
         return Response(status=status.HTTP_404_NOT_FOUND, data={'message': 'Place or Attraction not found'})
 
 # get one user by id
-# ============================================================
-
-
 @api_view(['GET'])
 def get_user(request, username):
     try:
@@ -285,7 +224,8 @@ def get_all_favorite_attractions(request):
         {
             "id": attr.id,
             "name": attr.name,
-            "image": attr.image.url,
+            "imageA": attr.imageA.url,
+            "imageB": attr.imageB.url,
             "place_id": attr.place_id.id,
 
         }
@@ -301,7 +241,8 @@ def get_user_posted_attractions(request, user_id):
         {
             "id": attr.id,
             "name": attr.name,
-            "image": attr.image.url,
+            "imageA": attr.imageA.url,
+            "imageB": attr.imageB.url,
             "place_id": attr.place_id.id,
         }
         for attr in posted_attractions
@@ -324,26 +265,3 @@ def delete_user_posted_attraction(request, attraction_id):
     except Attraction.DoesNotExist:
         return Response({"message": "Attraction not found."}, status=404)
 
-
-# def home(request):
-#     return render(request, 'home.html', {'posts':BlogPost.object.all()})
-
-
-# class HomeView(APIView):
-
-#    permission_classes = (IsAuthenticated, )
-#    def get(self, request):
-#        content = {'message': 'Welcome!'}
-#        return Response(content)
-
-# class LogoutView(APIView):
-#      permission_classes = (IsAuthenticated,)
-#      def post(self, request):
-
-#           try:
-#                refresh_token = request.data["refresh_token"]
-#                token = RefreshToken(refresh_token)
-#                token.blacklist()
-#                return Response(status=status.HTTP_205_RESET_CONTENT)
-#           except Exception as e:
-#                return Response(status=status.HTTP_400_BAD_REQUEST)
